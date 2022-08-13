@@ -76,19 +76,18 @@ End Property
 Public Property Get LpIDList(ByVal Index As Long) As LongPtr
 Attribute LpIDList.VB_Description = "Returns a pointer to a PIDL object given its index."
 Attribute LpIDList.VB_UserMemId = 0
-If Index > PropCount Or Index <= 0 Then Err.Raise Number:=35600, Description:="Index out of bounds"
-LpIDList = PropList(Index - 1)
-End Property
 
 #Else
 
 Public Property Get LpIDList(ByVal Index As Long) As Long
 Attribute LpIDList.VB_Description = "Returns a pointer to a PIDL object given its index."
+Attribute LpIDList.VB_UserMemId = 0
+
+#End If
+
 If Index > PropCount Or Index <= 0 Then Err.Raise Number:=35600, Description:="Index out of bounds"
 LpIDList = PropList(Index - 1)
 End Property
-
-#End If
 
 Public Function GetPathFromIDList(ByVal Index As Long) As String
 Attribute GetPathFromIDList.VB_Description = "Converts a PIDL object to a file system path given its index."

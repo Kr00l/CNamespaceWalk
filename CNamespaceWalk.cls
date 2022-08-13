@@ -140,6 +140,8 @@ If NamespaceWalkIDLRoot <> NULL_PTR Then
 End If
 End Sub
 
+#If VBA7 Then
+
 Private Property Get INSWCBObject_LpIShellFolder() As LongPtr
 INSWCBObject_LpIShellFolder = NamespaceWalkLpIShellFolder
 End Property
@@ -147,6 +149,18 @@ End Property
 Private Property Get INSWCBObject_LpIDList() As LongPtr
 INSWCBObject_LpIDList = NamespaceWalkLpIDList
 End Property
+
+#Else
+
+Private Property Get INSWCBObject_LpIShellFolder() As Long
+INSWCBObject_LpIShellFolder = NamespaceWalkLpIShellFolder
+End Property
+
+Private Property Get INSWCBObject_LpIDList() As Long
+INSWCBObject_LpIDList = NamespaceWalkLpIDList
+End Property
+
+#End If
 
 Private Function INSWCBObject_GetDisplayNameOf() As String
 Const SHGDN_FORPARSING As Long = &H8000&
