@@ -190,8 +190,10 @@ If StrPtr(DialogTitle) <> NULL_PTR Then
     DialogTitle = DialogTitle & vbNullChar
     Dim hMem As LongPtr
     hMem = CoTaskMemAlloc(LenB(DialogTitle))
-    CopyMemory ByVal hMem, ByVal StrPtr(DialogTitle), LenB(DialogTitle)
-    lpszTitle = hMem
+    If hMem <> NULL_PTR Then
+        CopyMemory ByVal hMem, ByVal StrPtr(DialogTitle), LenB(DialogTitle)
+        lpszTitle = hMem
+    End If
 End If
 INamespaceWalkCB_InitializeProgressDialog = S_OK
 End Function
