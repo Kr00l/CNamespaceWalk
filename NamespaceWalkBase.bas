@@ -41,12 +41,12 @@ End Function
 
 Private Function ShadowINSWCBObject(ByVal Ptr As LongPtr, ByVal LpIShellFolder As LongPtr, ByVal LpIDList As LongPtr) As INSWCBObject
 Dim ObjectPointer As LongPtr
-CopyMemory ObjectPointer, ByVal UnsignedAdd(Ptr, PTR_SIZE * 4), PTR_SIZE
+CopyMemory ObjectPointer, ByVal UnsignedAdd(Ptr, PTR_SIZE * 3), PTR_SIZE
 PtrToShadowObj ShadowINSWCBObject, ObjectPointer
 Dim VarPointer As LongPtr
-CopyMemory VarPointer, ByVal UnsignedAdd(Ptr, PTR_SIZE * 5), PTR_SIZE
+CopyMemory VarPointer, ByVal UnsignedAdd(Ptr, PTR_SIZE * 4), PTR_SIZE
 CopyMemory ByVal VarPointer, LpIShellFolder, PTR_SIZE
-CopyMemory VarPointer, ByVal UnsignedAdd(Ptr, PTR_SIZE * 6), PTR_SIZE
+CopyMemory VarPointer, ByVal UnsignedAdd(Ptr, PTR_SIZE * 5), PTR_SIZE
 CopyMemory ByVal VarPointer, LpIDList, PTR_SIZE
 End Function
 
@@ -67,18 +67,17 @@ Public Function INamespaceWalkCBPtr(ByVal This As INamespaceWalkCB, ByVal Object
 
 #End If
 
-Dim VTableData(0 To 6) As LongPtr
+Dim VTableData(0 To 5) As LongPtr
 VTableData(0) = GetVTableINamespaceWalkCB()
 VTableData(1) = 0 ' RefCount is uninstantiated
 VTableData(2) = ObjPtr(This)
-VTableData(3) = 0 ' lpszTitle
-VTableData(4) = ObjPtr(Object)
-VTableData(5) = VarPtr(LpIShellFolder)
-VTableData(6) = VarPtr(LpIDList)
+VTableData(3) = ObjPtr(Object)
+VTableData(4) = VarPtr(LpIShellFolder)
+VTableData(5) = VarPtr(LpIDList)
 Dim hMem As LongPtr
-hMem = CoTaskMemAlloc(PTR_SIZE * 7)
+hMem = CoTaskMemAlloc(PTR_SIZE * 6)
 If hMem <> NULL_PTR Then
-    CopyMemory ByVal hMem, VTableData(0), PTR_SIZE * 7
+    CopyMemory ByVal hMem, VTableData(0), PTR_SIZE * 6
     INamespaceWalkCBPtr = hMem
 End If
 End Function
@@ -97,18 +96,17 @@ GetVTableINamespaceWalkCB = VarPtr(VTableINamespaceWalkCB(0))
 End Function
 
 Private Function INamespaceWalkCB2Ptr(ByVal Ptr As LongPtr) As LongPtr
-Dim VTableData(0 To 6) As LongPtr
+Dim VTableData(0 To 5) As LongPtr
 VTableData(0) = GetVTableINamespaceWalkCB2()
 VTableData(1) = 0 ' RefCount is uninstantiated
 CopyMemory VTableData(2), ByVal UnsignedAdd(Ptr, PTR_SIZE * 2), PTR_SIZE
-VTableData(3) = 0 ' lpszTitle
+CopyMemory VTableData(3), ByVal UnsignedAdd(Ptr, PTR_SIZE * 3), PTR_SIZE
 CopyMemory VTableData(4), ByVal UnsignedAdd(Ptr, PTR_SIZE * 4), PTR_SIZE
 CopyMemory VTableData(5), ByVal UnsignedAdd(Ptr, PTR_SIZE * 5), PTR_SIZE
-CopyMemory VTableData(6), ByVal UnsignedAdd(Ptr, PTR_SIZE * 6), PTR_SIZE
 Dim hMem As LongPtr
-hMem = CoTaskMemAlloc(PTR_SIZE * 7)
+hMem = CoTaskMemAlloc(PTR_SIZE * 6)
 If hMem <> NULL_PTR Then
-    CopyMemory ByVal hMem, VTableData(0), PTR_SIZE * 7
+    CopyMemory ByVal hMem, VTableData(0), PTR_SIZE * 6
     INamespaceWalkCB2Ptr = hMem
 End If
 End Function
@@ -167,12 +165,7 @@ Private Function INamespaceWalkCB_Release(ByVal Ptr As LongPtr) As Long
 CopyMemory INamespaceWalkCB_Release, ByVal UnsignedAdd(Ptr, PTR_SIZE), 4
 INamespaceWalkCB_Release = INamespaceWalkCB_Release - 1
 CopyMemory ByVal UnsignedAdd(Ptr, PTR_SIZE), INamespaceWalkCB_Release, 4
-If INamespaceWalkCB_Release = 0 Then
-    Dim lpszTitle As LongPtr
-    CopyMemory lpszTitle, ByVal UnsignedAdd(Ptr, PTR_SIZE * 3), PTR_SIZE
-    If lpszTitle <> NULL_PTR Then CoTaskMemFree lpszTitle
-    CoTaskMemFree Ptr
-End If
+If INamespaceWalkCB_Release = 0 Then CoTaskMemFree Ptr
 End Function
 
 Private Function INamespaceWalkCB_FoundItem(ByVal Ptr As LongPtr, ByVal LpIShellFolder As LongPtr, ByVal LpIDList As LongPtr) As Long
@@ -195,9 +188,10 @@ Dim DialogTitle As String
 ShadowINamespaceWalkCB(Ptr).InitializeProgressDialog DialogTitle
 If StrPtr(DialogTitle) <> NULL_PTR Then
     DialogTitle = DialogTitle & vbNullChar
-    lpszTitle = CoTaskMemAlloc(LenB(DialogTitle))
-    CopyMemory ByVal lpszTitle, ByVal StrPtr(DialogTitle), LenB(DialogTitle)
-    CopyMemory ByVal UnsignedAdd(Ptr, PTR_SIZE * 3), ByVal VarPtr(lpszTitle), PTR_SIZE
+    Dim hMem As LongPtr
+    hMem = CoTaskMemAlloc(LenB(DialogTitle))
+    CopyMemory ByVal hMem, ByVal StrPtr(DialogTitle), LenB(DialogTitle)
+    lpszTitle = hMem
 End If
 INamespaceWalkCB_InitializeProgressDialog = S_OK
 End Function
