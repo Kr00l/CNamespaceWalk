@@ -45,16 +45,7 @@ Next i
 Erase PropList()
 End Sub
 
-#If VBA7 Then
-
 Friend Sub FInit(ByVal cItems As Long, ByVal LpIDListArray As LongPtr)
-
-#Else
-
-Friend Sub FInit(ByVal cItems As Long, ByVal LpIDListArray As Long)
-
-#End If
-
 PropCount = cItems
 If LpIDListArray <> NULL_PTR Then
     Dim i As Long

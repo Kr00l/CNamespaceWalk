@@ -192,6 +192,8 @@ If StrPtr(DialogTitle) <> NULL_PTR Then
     hMem = CoTaskMemAlloc(LenB(DialogTitle))
     If hMem <> NULL_PTR Then
         CopyMemory ByVal hMem, ByVal StrPtr(DialogTitle), LenB(DialogTitle)
+        ' [out] LPWSTR *ppszTitle
+        ' The interface itself will take care to CoTaskMemFree the string later on automatically.
         lpszTitle = hMem
     End If
 End If
