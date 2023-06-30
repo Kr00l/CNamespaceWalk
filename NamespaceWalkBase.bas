@@ -34,28 +34,25 @@ Private VTableINamespaceWalkCB(0 To 6) As LongPtr
 Private VTableINamespaceWalkCB2(0 To 7) As LongPtr
 
 Private Function ShadowINamespaceWalkCB(ByVal Ptr As LongPtr) As INamespaceWalkCB
-Dim ObjectPointer As LongPtr
+Dim ObjectPointer As LongPtr, TempObj As Object
 CopyMemory ObjectPointer, ByVal UnsignedAdd(Ptr, PTR_SIZE * 2), PTR_SIZE
-PtrToShadowObj ShadowINamespaceWalkCB, ObjectPointer
+CopyMemory TempObj, ObjectPointer, PTR_SIZE
+Set ShadowINamespaceWalkCB = TempObj
+CopyMemory TempObj, NULL_PTR, PTR_SIZE
 End Function
 
 Private Function ShadowINSWCBObject(ByVal Ptr As LongPtr, ByVal LpIShellFolder As LongPtr, ByVal LpIDList As LongPtr) As INSWCBObject
-Dim ObjectPointer As LongPtr
+Dim ObjectPointer As LongPtr, TempObj As Object
 CopyMemory ObjectPointer, ByVal UnsignedAdd(Ptr, PTR_SIZE * 3), PTR_SIZE
-PtrToShadowObj ShadowINSWCBObject, ObjectPointer
+CopyMemory TempObj, ObjectPointer, PTR_SIZE
+Set ShadowINSWCBObject = TempObj
+CopyMemory TempObj, NULL_PTR, PTR_SIZE
 Dim VarPointer As LongPtr
 CopyMemory VarPointer, ByVal UnsignedAdd(Ptr, PTR_SIZE * 4), PTR_SIZE
 CopyMemory ByVal VarPointer, LpIShellFolder, PTR_SIZE
 CopyMemory VarPointer, ByVal UnsignedAdd(Ptr, PTR_SIZE * 5), PTR_SIZE
 CopyMemory ByVal VarPointer, LpIDList, PTR_SIZE
 End Function
-
-Private Sub PtrToShadowObj(ByRef Destination As Object, ByVal lpObject As LongPtr)
-Dim TempObj As Object
-CopyMemory TempObj, lpObject, PTR_SIZE
-Set Destination = TempObj
-CopyMemory TempObj, NULL_PTR, PTR_SIZE
-End Sub
 
 #If VBA7 Then
 
