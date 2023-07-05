@@ -312,7 +312,7 @@ Private Function UnsignedAdd(ByVal Start As LongPtr, ByVal Incr As LongPtr) As L
 
 #If Win64 Then
 
-UnsignedAdd = Start + Incr
+UnsignedAdd = ((Start Xor &H8000000000000000^) + Incr) Xor &H8000000000000000^
 
 #Else
 
