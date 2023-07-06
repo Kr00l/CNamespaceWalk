@@ -14,26 +14,22 @@ Attribute VB_Exposed = False
 Option Explicit
 
 #If VBA7 Then
-
 Public Property Get LpIShellFolder() As LongPtr
 Attribute LpIShellFolder.VB_Description = "Interface method to return a pointer to an IShellFolder object."
-End Property
-
-Public Property Get LpIDList() As LongPtr
-Attribute LpIDList.VB_Description = "Interface method to return a pointer to a PIDL object."
-End Property
-
 #Else
-
 Public Property Get LpIShellFolder() As Long
 Attribute LpIShellFolder.VB_Description = "Interface method to return a pointer to an IShellFolder object."
+#End If
 End Property
 
+#If VBA7 Then
+Public Property Get LpIDList() As LongPtr
+Attribute LpIDList.VB_Description = "Interface method to return a pointer to a PIDL object."
+#Else
 Public Property Get LpIDList() As Long
 Attribute LpIDList.VB_Description = "Interface method to return a pointer to a PIDL object."
-End Property
-
 #End If
+End Property
 
 Public Function GetDisplayNameOf() As String
 Attribute GetDisplayNameOf.VB_Description = "Support IShellFolder::GetDisplayNameOf"

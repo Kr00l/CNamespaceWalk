@@ -63,19 +63,14 @@ Set Object = Me
 End Property
 
 #If VBA7 Then
-
 Public Property Get LpIDList(ByVal Index As Long) As LongPtr
 Attribute LpIDList.VB_Description = "Returns a pointer to a PIDL object given its index."
 Attribute LpIDList.VB_UserMemId = 0
-
 #Else
-
 Public Property Get LpIDList(ByVal Index As Long) As Long
 Attribute LpIDList.VB_Description = "Returns a pointer to a PIDL object given its index."
 Attribute LpIDList.VB_UserMemId = 0
-
 #End If
-
 If Index > PropCount Or Index <= 0 Then Err.Raise Number:=35600, Description:="Index out of bounds"
 LpIDList = PropList(Index - 1)
 End Property
@@ -94,15 +89,9 @@ Count = PropCount
 End Property
 
 Private Function UnsignedAdd(ByVal Start As LongPtr, ByVal Incr As LongPtr) As LongPtr
-
 #If Win64 Then
-
 UnsignedAdd = ((Start Xor &H8000000000000000^) + Incr) Xor &H8000000000000000^
-
 #Else
-
 UnsignedAdd = ((Start Xor &H80000000) + Incr) Xor &H80000000
-
 #End If
-
 End Function

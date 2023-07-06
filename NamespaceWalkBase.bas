@@ -55,15 +55,10 @@ CopyMemory ByVal VarPointer, LpIDList, PTR_SIZE
 End Function
 
 #If VBA7 Then
-
 Public Function INamespaceWalkCBPtr(ByVal This As INamespaceWalkCB, ByVal Object As INSWCBObject, ByRef LpIShellFolder As LongPtr, ByRef LpIDList As LongPtr) As LongPtr
-
 #Else
-
 Public Function INamespaceWalkCBPtr(ByVal This As INamespaceWalkCB, ByVal Object As INSWCBObject, ByRef LpIShellFolder As Long, ByRef LpIDList As Long) As Long
-
 #End If
-
 Dim VTableData(0 To 5) As LongPtr
 VTableData(0) = GetVTableINamespaceWalkCB()
 VTableData(1) = 0 ' RefCount is uninstantiated
@@ -207,15 +202,9 @@ ProcPtr = Address
 End Function
 
 Private Function UnsignedAdd(ByVal Start As LongPtr, ByVal Incr As LongPtr) As LongPtr
-
 #If Win64 Then
-
 UnsignedAdd = ((Start Xor &H8000000000000000^) + Incr) Xor &H8000000000000000^
-
 #Else
-
 UnsignedAdd = ((Start Xor &H80000000) + Incr) Xor &H80000000
-
 #End If
-
 End Function

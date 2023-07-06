@@ -141,26 +141,20 @@ End If
 End Sub
 
 #If VBA7 Then
-
 Private Property Get INSWCBObject_LpIShellFolder() As LongPtr
-INSWCBObject_LpIShellFolder = NamespaceWalkLpIShellFolder
-End Property
-
-Private Property Get INSWCBObject_LpIDList() As LongPtr
-INSWCBObject_LpIDList = NamespaceWalkLpIDList
-End Property
-
 #Else
-
 Private Property Get INSWCBObject_LpIShellFolder() As Long
+#End If
 INSWCBObject_LpIShellFolder = NamespaceWalkLpIShellFolder
 End Property
 
+#If VBA7 Then
+Private Property Get INSWCBObject_LpIDList() As LongPtr
+#Else
 Private Property Get INSWCBObject_LpIDList() As Long
+#End If
 INSWCBObject_LpIDList = NamespaceWalkLpIDList
 End Property
-
-#End If
 
 Private Function INSWCBObject_GetDisplayNameOf() As String
 Const SHGDN_FORPARSING As Long = &H8000&
@@ -309,15 +303,9 @@ SetLastError HResult ' S_OK will clear the last error code, if any.
 End Function
 
 Private Function UnsignedAdd(ByVal Start As LongPtr, ByVal Incr As LongPtr) As LongPtr
-
 #If Win64 Then
-
 UnsignedAdd = ((Start Xor &H8000000000000000^) + Incr) Xor &H8000000000000000^
-
 #Else
-
 UnsignedAdd = ((Start Xor &H80000000) + Incr) Xor &H80000000
-
 #End If
-
 End Function
